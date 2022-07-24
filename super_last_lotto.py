@@ -26,44 +26,56 @@ def luck(L='',p='',w='',mesg=''):
         print(colored(f"{mesg} \n Your Ticket has been sold at {places[random.randint(0,len(places)-1)]}","red",'on_white'))
 
 
-                
-def info(name=None,balance=None):
-        
-        name=input(colored('what is your name \n','red')).strip()
-    
-        while name=='' or re.findall(r"[\d\W]",name):
-            if name=='':
-                print("Please don't leave it blank")
-            else:
-                print("Please type only letters!")    
-            name=input(colored('what is your name \n','red'))
+def balance(name_user):
 
-        def check():
-            balance=input(colored('how much would you like to top up your account \n','red')).strip()
-            if balance=='':
-                print('please dont leave it blank \n')
-                return check()
-            
-            elif re.findall(r"^[\d]+$",balance):
-                balance=int(balance)
-                if 199<balance:
-                    print(colored(f'Please {name}. Make sure to not excced the limit $200' ,"red"))   
-                    return check() 
-                elif balance<6:
-                    print(colored(f'Please {name}. The top up must be higher than $5' ,"red"))
-                    return check()          
-            
-            else:
-                print('please onlt type number \n')
-                return check()
-            
-            return balance                           
-                    
-        balance=check()
-        print(f"\n Good Luck {colored(name.upper(),'red')} - your balance is {balance}$ \n")
-        print(colored(f"each line of JackPot cost $2 and 1$ for Strike or Lotto ","red",'on_white'))
-        return x(name,balance)
+    def check_balance(balance_user,balance_user_not_accept=None):
+        if 199<balance_user:
+            print(colored(f'\nPlease {name_user}. Make sure to not excced the limit $200\n{"Also we dont accept amounts like"+balance_user_not_accept+"c" if balance_user_not_accept else ""}' ,"red","on_white"))   
+            return balance(name_user) 
+        
+        elif balance_user<6:
+            print(colored(f'\nPlease {name_user}. The top up must be higher than $5\n{"Also we do not accept amounts like"+balance_user_not_accept+"c" if balance_user_not_accept else ""}' ,"red","on_white"))
+            return balance(name_user)
+        
+        elif balance_user_not_accept:
+            print(colored(f'\nGood Luck {name_user}.But we will only accept {balance_user}$ we do not accept amounts like {balance_user_not_accept+"c" if balance_user_not_accept else ""}' ,"red","on_white"))
+            print(colored(f"Each line of JackPot cost $2 and 1$ for Strike or Lotto ","red",'on_white'))
+            return x(name_user,balance_user)
+        
+    balance_user=input(colored('how much would you like to top up your account \n','red')).strip()
+
+    if balance_user=='':
+        print(f'\nplease dont leave it blank {name_user}\n ')
+        return balance(name_user)
     
+    elif re.findall(r"^[\d]+$",balance_user):
+        balance_user=int(balance_user)
+        check_balance(balance_user)
+              
+    elif balance_user.find('.') !=-1 and balance_user.count('.')==1:
+        balance_user_not_accept=balance_user[balance_user.index('.'):]  
+        balance_user=int(balance_user[:balance_user.index('.')])
+        check_balance(balance_user,balance_user_not_accept)
+        
+    else:
+        print('\nplease onlt type number')
+        return balance(name_user)
+    
+    print(colored(f"Good Luck {name_user.upper()} - your balance is {balance_user}$",'red','on_white'))
+    print(colored(f"Each line of JackPot cost $2 and 1$ for Strike or Lotto ","red",'on_white'))
+    return x(name_user,balance_user)             
+             
+                
+def name_user():
+    name_user=input(colored('what is your name \n','red')).strip()
+    while name_user=='' or re.findall(r"[\d\W]",name_user):
+        if name_user=='':
+            print("Please don't leave it blank")
+        else:
+            print("Please type only letters!")    
+        name_user=input(colored('what is your name \n','red'))
+    return balance(name_user)
+            
 
 def strike(balance):
     which="stike"
@@ -96,9 +108,10 @@ def lotto(balance):
 
 
 def x(name,balance):
+    
     which=input(colored('\n do you want lotto or strike ?\n','red').capitalize()).lower()
     
-    while re.search(r"[^strikelto]*",which).group() or which=='':
+    while which=='' :
             print(f'please {colored(name.upper(),"red")} either type lotto or strike. thank you :)')    
             which=input(colored('\n do you want lotto or strike ?\n','red').capitalize()).lower()
     
@@ -108,13 +121,13 @@ def x(name,balance):
         answers=['y','yes','ys']
         
         if like_strike  or like_lotto :          
-            ask=input(colored(f"do you mean {'strike' if like_strike else 'lotto' } ? yes or no ?\n",'red')).lower()
+            ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red')).lower()
             while ask=="":
-                    print(f'Dear {name.upper()} please make sure to type something...') 
-                    ask=input(colored(f"do you mean {'strike' if like_strike else 'lotto' } ? yes or no ?\n",'red')).lower()       
+                    print(f'Dear {name.upper()} please make sure to type Yes or No...') 
+                    ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red')).lower()       
             else:
                 if ask not in answers:
-                    print(f'\n Hmmmm {colored(name.upper(),"red")}. Let start from begin')
+                    print(colored(f'I think you change your mind{name.upper()} ....let us strat from begin!',"red","on_white"))
                     return x(name,balance) 
                 else:
                     if like_strike: 
@@ -122,7 +135,7 @@ def x(name,balance):
                     else:
                         return lotto(balance)    
         else:
-            print(f'I can not understand {name.upper()} that....let us strat from begin!')
+            print(colored(f'I can not understand that {name.upper()} ....let us strat from begin!',"red","on_white"))
             return x(name,balance)                  
         
     else:                     
@@ -132,4 +145,4 @@ def x(name,balance):
         else:
             return strike(balance)            
             
-info()
+name_user()
