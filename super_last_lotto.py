@@ -70,10 +70,10 @@ def name_user():
     name_user=input(colored('what is your name \n','red')).strip()
     while name_user=='' or re.findall(r"[\d\W]",name_user):
         if name_user=='':
-            print("Please don't leave it blank")
+            print(colored("Please don't leave it blank",'red','on_white'))
         else:
-            print("Please type only letters!")    
-        name_user=input(colored('what is your name \n','red'))
+            print(colored("Please type only letters!",'red','on_white'))    
+        name_user=input(colored('what is your name \n','red',"on_white"))
     return balance(name_user)
             
 
@@ -87,7 +87,7 @@ def strike(balance):
 
 def lotto(balance):
     which="lotto"
-    power=input(colored(f"are you keen for a jakpot ? yes or no \n",'red')).lower()
+    power=input(colored(f"are you keen for a jakpot ? yes or no \n",'red',"on_white")).lower()
     if power =='yes' or power=='y':
         if balance %2==0:
             lines=int(balance/2)
@@ -109,11 +109,11 @@ def lotto(balance):
 
 def x(name,balance):
     
-    which=input(colored('\n do you want lotto or strike ?\n','red').capitalize()).lower()
+    which=input(colored('\nDo you want lotto or strike ?\n','red',"on_white").capitalize()).lower()
     
     while which=='' :
-            print(f'please {colored(name.upper(),"red")} either type lotto or strike. thank you :)')    
-            which=input(colored('\n do you want lotto or strike ?\n','red').capitalize()).lower()
+            print(colored(f'please {name.upper()} Either type lotto or strike. thank you :)',"red","on_white"))    
+            which=input(colored('\n do you want lotto or strike ?\n','red','on_white').capitalize()).lower()
     
     if which != 'lotto' and which!='strike':           
         like_strike=re.search(r"[strike]{,10}",which).group()
@@ -121,10 +121,10 @@ def x(name,balance):
         answers=['y','yes','ys']
         
         if like_strike  or like_lotto :          
-            ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red')).lower()
+            ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red','on_white')).lower()
             while ask=="":
                     print(f'Dear {name.upper()} please make sure to type Yes or No...') 
-                    ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red')).lower()       
+                    ask=input(colored(f"Do you mean {'strike' if like_strike else 'lotto' } ? Yes or No ?\n",'red',"on_white")).lower()       
             else:
                 if ask not in answers:
                     print(colored(f'I think you change your mind{name.upper()} ....let us strat from begin!',"red","on_white"))
